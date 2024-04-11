@@ -170,11 +170,15 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
 for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
+    if msg["role"] == "assistant" : 
+        avatar = "🤖"
+    else : 
+        avatar="🧑‍💻"
+    st.chat_message(msg["role"], avatar = avatar).write(msg["content"])
 
 if prompt := st.chat_input():
     st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
+    st.chat_message("user", avatar="🧑‍💻").write(prompt)
 
     dataset = load_dataset()
     X,y,tokenizer,labl_enc = tokenize_dataset(dataset)
@@ -182,4 +186,4 @@ if prompt := st.chat_input():
     response = model_responce(prompt,tokenizer,model,labl_enc,dataset)
     
     st.session_state.messages.append({"role": "assistant", "content": response})
-    st.chat_message("assistant").write(response)
+    st.chat_message("assistant", avatar="🤖").write(response)
